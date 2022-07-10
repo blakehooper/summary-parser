@@ -1,0 +1,27 @@
+[
+  {
+    "clientInformation": "CL-1234-0002-0001",
+    "productInformation": "SGX-FU-NK",
+    "totalTransactionAmount": -52
+  },
+  {
+    "clientInformation": "CL-1234-0003-0001",
+    "productInformation": "CME-FU-N1",
+    "totalTransactionAmount": 285
+  },
+  {
+    "clientInformation": "CL-1234-0003-0001",
+    "productInformation": "CME-FU-NK.",
+    "totalTransactionAmount": -215
+  },
+  {
+    "clientInformation": "CL-4321-0002-0001",
+    "productInformation": "SGX-FU-NK",
+    "totalTransactionAmount": 46
+  },
+  {
+    "clientInformation": "CL-4321-0003-0001",
+    "productInformation": "CME-FU-N1",
+    "totalTransactionAmount": -79
+  }
+]

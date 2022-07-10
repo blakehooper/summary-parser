@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok' version '6.5.0.2'
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.palantir.docker' version '0.34.0'
+    id 'com.palantir.docker-run' version '0.34.0'
+    id 'maven-publish'
+}
+
+group 'org.bh'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    integrationTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+    functionalTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+// dependencies declaration
+configurations {
+    integrationTestImplementation.extendsFrom(testImplementation)
+    integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+
+    functionalTestImplementation.extendsFrom(testImplementation)
+    functionalTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    integrationTestImplementation 'io.projectreactor:reactor-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+docker {
+    name 'summary-parser'
+    tag 'latest', ''
+    files tasks.bootJar.outputs
+}
+
+dockerRun {
+    name 'dev-container'
+    image 'summary-parser'
+    ports '8080:8080'
+    volumes './application-resources': '/application-resources'
+
+    daemonize true
+    clean true
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+    description = "Run integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+task functionalTest(type: Test) {
+    useJUnitPlatform()
+    description = "Run functional tests"
+    group = "verification"
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+}
